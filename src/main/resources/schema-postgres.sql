@@ -1,14 +1,14 @@
 DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS consumable;
-DROP TABLE IF EXISTS consumable_category;
+DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS users_roles;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS roles;
 
 DROP SEQUENCE IF EXISTS roles_seq;
-DROP SEQUENCE IF EXISTS consumable_category_seq;
+DROP SEQUENCE IF EXISTS categories_seq;
 CREATE SEQUENCE roles_seq START WITH 100000;
-CREATE SEQUENCE consumable_category_seq START WITH 100000;
+CREATE SEQUENCE categories_seq START WITH 100000;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -41,23 +41,23 @@ CREATE TABLE users_roles
   CONSTRAINT users_roles_idx UNIQUE (user_id, role_id)
 );
 
-CREATE TABLE consumable_category
+CREATE TABLE categories
 (
-  id   INTEGER DEFAULT nextval('consumable_category_seq') PRIMARY KEY,
+  id   INTEGER DEFAULT nextval('categories_seq') PRIMARY KEY,
   name VARCHAR(30) NOT NULL
 );
 
 
 CREATE TABLE consumable
 (
-  id                     UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  name                   VARCHAR(255) NOT NULL,
-  contract               VARCHAR(255),
-  price                  INTEGER,
-  part_number            VARCHAR(30),
-  consumable_category_id INTEGER,
-  status                 INTEGER      NOT NULL,
-  FOREIGN KEY (consumable_category_id) REFERENCES consumable_category (id) ON DELETE SET NULL
+  id          UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  name        VARCHAR(255) NOT NULL,
+  contract    VARCHAR(255),
+  price       INTEGER,
+  part_number VARCHAR(30),
+  category_id INTEGER,
+  status      INTEGER      NOT NULL,
+  FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL
 );
 
 CREATE TABLE transactions

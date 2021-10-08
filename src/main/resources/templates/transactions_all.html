@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EasyExpendit: View Transactions</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Consumable name</th>
+        <th scope="col">Type</th>
+        <th scope="col">Author</th>
+        <th scope="col">Timestamp</th>
+        <th scope="col">Comment</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${transactions_list}">
+        <td th:text="${entry.id}"></td>
+        <td th:text="${entry.consumable.name}"></td>
+        <td th:text="${entry.type}"></td>
+        <td th:text="${entry.author.name}"></td>
+        <td th:text="${entry.dateTime}"></td>
+        <td th:text="${entry.comment}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

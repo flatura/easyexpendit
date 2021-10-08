@@ -36,6 +36,11 @@ public class User {
     private String comment;
 
     @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "author")
@@ -52,6 +57,18 @@ public class User {
         this.lastLogon = lastLogon;
         this.enabled = enabled;
         this.comment = comment;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public Set<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Set<Transaction> transactions) {
+        this.transactions = transactions;
     }
 
     public String getPassword() {

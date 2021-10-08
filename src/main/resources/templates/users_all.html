@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EasyExpendit: View Users</title>
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">User name</th>
+        <th scope="col">Email</th>
+        <th scope="col">Regisetered</th>
+        <th scope="col">Last logon</th>
+        <th scope="col">Enabled</th>
+        <th scope="col">Comment</th>
+        <th scope="col">Roles</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${users_list}">
+        <td th:text="${entry.id}"></td>
+        <td th:text="${entry.name}"></td>
+        <td th:text="${entry.email}"></td>
+        <td th:text="${entry.registered}"></td>
+        <td th:text="${entry.lastLogon}"></td>
+        <td th:text="${entry.enabled}"></td>
+        <td th:text="${entry.comment}"></td>
+        <td th:text="${entry.roles}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

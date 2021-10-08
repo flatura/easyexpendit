@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Table(name = "transactions")
 public class Transaction {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -37,6 +38,10 @@ public class Transaction {
         this.author = author;
         this.dateTime = dateTime;
         this.comment = comment;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public Status getType() {

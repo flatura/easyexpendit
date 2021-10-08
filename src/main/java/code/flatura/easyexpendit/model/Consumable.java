@@ -25,7 +25,7 @@ public class Consumable {
     private String partNumber;
 
     @ManyToOne
-    @JoinColumn(name="consumable_category_id")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @Column(name="status")
@@ -45,6 +45,10 @@ public class Consumable {
         this.category = category;
         this.status = status;
         this.transactions = transactions;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
