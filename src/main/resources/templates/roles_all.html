@@ -4,15 +4,17 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div th:insert="fragments/style_css"></div>
     <title>EasyExpendit: View Roles</title>
 </head>
-<body>
-<table>
+<body style="padding-top: 55px">
+<div th:insert="fragments/menu"></div>
+<h2>Roles</h2>
+<table class="table table-hover table-sm">
     <thead>
     <tr>
         <th scope="col">ID</th>
         <th scope="col">Role name</th>
-
     </tr>
     </thead>
     <tbody>
@@ -22,5 +24,6 @@
     </tr>
     </tbody>
 </table>
+<div th:insert="fragments/style_scripts"></div>
 </body>
 </html>

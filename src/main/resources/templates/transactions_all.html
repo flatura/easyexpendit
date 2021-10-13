@@ -4,10 +4,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div th:insert="fragments/style_css"></div>
     <title>EasyExpendit: View Transactions</title>
 </head>
-<body>
-<table>
+<body style="padding-top: 55px">
+<div th:insert="fragments/menu"></div>
+<h1>All transactions</h1>
+<table class="table table-hover table-sm">
     <thead>
     <tr>
         <th scope="col">ID</th>
@@ -29,5 +32,6 @@
     </tr>
     </tbody>
 </table>
+<div th:insert="fragments/style_scripts"></div>
 </body>
 </html>
