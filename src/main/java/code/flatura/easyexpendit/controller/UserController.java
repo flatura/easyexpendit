@@ -20,6 +20,7 @@ public class UserController {
 
     @GetMapping("/users")
     public ModelAndView getAll(Map<String, Object> model) {
+        LOG.info("Get all users");
         model.put("users_list", userService.getAll());
         return new ModelAndView("users_all", model);
     }

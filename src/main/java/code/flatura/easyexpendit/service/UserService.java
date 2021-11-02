@@ -1,5 +1,6 @@
 package code.flatura.easyexpendit.service;
 
+import code.flatura.easyexpendit.SecurityUtil;
 import code.flatura.easyexpendit.model.User;
 import code.flatura.easyexpendit.repository.datajpa.UserRepository;
 import org.slf4j.Logger;
@@ -18,10 +19,17 @@ public class UserService {
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+        this.initSecurity();
     }
 
     public List<User> getAll() {
         LOG.info("Get all");
         return userRepository.findAll();
+    }
+
+    private void initSecurity() {
+        // TODO: get with role Admin
+        SecurityUtil.setLoggedUser(userRepository.getById(SecurityUtil.getLoggedUserId()));
+        LOG.info("Security initialized: loggedUser is {}", SecurityUtil.getLoggedUser());
     }
 }

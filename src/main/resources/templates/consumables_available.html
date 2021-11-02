@@ -9,30 +9,25 @@
 </head>
 <body style="padding-top: 55px">
 <div th:insert="fragments/menu"></div>
-<h1>Все расходники</h1>
+<h1>Доступные расходники</h1>
+<!--<div th:insert="fragments/consumables_nav_start"></div>
+<div th:insert="fragments/consumables_nav_create_button"></div>
+<div th:insert="fragments/consumables_nav_search"></div>
+<div th:insert="fragments/consumables_nav_end"></div>
+
+<div th:insert="fragments/consumables_table_start_headers"></div>
+<div th:insert="fragments/consumables_proceed_form_available"></div>
+<div th:insert="fragments/consumables_table_end"></div>
+
+<div th:insert="fragments/consumables_modal_edit"></div>
+-->
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
         <button type="button" class="btn btn-info" data-bs-toggle="modal"
                 data-bs-target="#modalWindowDelete">Добавить
             <!--<span class="glyphicon glyphicon-wrench"></span>-->
         </button>
-        <form action="/consumables/filtered">
-            <button type="submit" class="btn btn-primary" value="INCOMING" th:name="status" th:value="INCOMING">
-                Заказанные
-            </button>
-            <button type="submit" class="btn btn-success" value="AVAILABLE" th:name="status" th:value="AVAILABLE">В
-                наличии
-            </button>
-            <button type="submit" class="btn btn-info" value="IN_WORK" th:name="status" th:value="IN_WORK">В работе
-            </button>
-            <button type="submit" class="btn btn-warning" value="END_OF_WORK" th:name="status" th:value="END_OF_WORK">
-                Снятые
-            </button>
-            <button type="submit" class="btn btn-secondary" value="DELETED" th:name="status" th:value="DELETED">
-                Списанные
-            </button>
-        </form>
-        <form class="form-inline d-flex" action="/consumables/search">
+        <form class="form-inline d-flex" action="/consumables/available">
             <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Поиск" th:name="word">
             <button class="btn btn-success my-2 my-sm-0" type="submit">Поиск</button>
         </form>
@@ -69,31 +64,7 @@
                            th:name="comment"/>
                     <input type="hidden" th:name="id" th:value="${entry.id}"/>
                 </a>
-                <a th:switch="${entry.status}">
-                        <span th:case=${T(code.flatura.easyexpendit.model.Status).PLANNING}>
-                            <button type="submit" class="btn btn-secondary" value="INCOMING"
-                                    th:name="status">Заказан</button>
-                        </span>
-                    <span th:case=${T(code.flatura.easyexpendit.model.Status).INCOMING}>
-                            <button type="submit" class="btn btn-primary" value="AVAILABLE" th:name="status">Оприходовать</button>
-                        </span>
-                    <span th:case=${T(code.flatura.easyexpendit.model.Status).AVAILABLE}>
-                            <button type="submit" class="btn btn-success" value="IN_WORK"
-                                    th:name="status">Установить</button>
-                        </span>
-                    <span th:case=${T(code.flatura.easyexpendit.model.Status).IN_WORK}>
-                            <button type="submit" class="btn btn-info" value="END_OF_WORK"
-                                    th:name="status">Снять</button>
-                        </span>
-                    <span th:case=${T(code.flatura.easyexpendit.model.Status).END_OF_WORK}>
-                            <button type="submit" class="btn btn-warning" value="DELETED" th:value="END_OF_WORK"
-                                    th:name="status">Списать</button>
-                        </span>
-                    <!--
-                    <span th:case=${T(code.flatura.easyexpendit.model.Status).DISPOSABLE}>
-                        <button type="button" class="btn btn-danger">Удалить</button>
-                    </span>
-                    -->
+                <button type="submit" class="btn btn-success" value="IN_WORK" th:name="status">В работу</button>
                 </a>
                 <a>
                     <!-- Modal Edit window -->
@@ -191,5 +162,8 @@
         selectorTransactionComment.text = transactionComment
     })
 </script>
+</body>
+</html>
+
 </body>
 </html>
