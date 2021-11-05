@@ -5,18 +5,18 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <div th:insert="fragments/style_css"></div>
-    <title>EasyExpendit: Edit Consumable</title>
+    <title>EasyExpendit: Create Consumable</title>
 </head>
 <body style="padding-top: 55px">
 <div th:insert="fragments/menu"></div>
 <div class="container-fluid">
-    <h1 th:text="${consumable.name}"></h1>
-    <form action="#" method="post" th:action="@{/consumables/edit}" th:object="${consumable}">
-        <div class="mb-3">
+    <h1>Создание нового расходника</h1>
+    <form action="#" method="post" th:action="@{/consumables/add}" th:object="${consumable}">
+        <!--<div class="mb-3">
             <label for="input-consumable-id" class="col-form-label">ID расходника</label>
             <input disabled type="text" class="form-control" id="input-consumable-id" th:value="${consumable.id}">
             <input type="hidden" name="id" th:value="${consumable.id}">
-        </div>
+        </div>-->
         <div class="mb-3">
             <label for="input-consumable-name" class="col-form-label">Наименование расходника</label>
             <input type="text" class="form-control" name="name" id="input-consumable-name"
@@ -38,6 +38,21 @@
                    th:value="${consumable.partNumber}">
         </div>
         <div class="mb-3">
+            <label for="input-transaction-type" class="col-form-label">Статус</label>
+            <input disabled type="text" class="form-control" name="status" id="input-transaction-type"
+                   th:value="${consumable.status}">
+        </div>
+        <div class="mb-3">
+            <label for="input-consumable-count" class="col-form-label">Количество</label>
+            <input type="text" class="form-control" name="count" id="input-consumable-count"
+                   th:value="${consumable.count}">
+        </div>
+        <div class="mb-3">
+            <label for="input-consumable-transaction-comment" class="col-form-label">Комментарий к транзакции</label>
+            <input type="text" class="form-control" name="transactionComment" id="input-consumable-transaction-comment"
+                   th:value="${consumable.transactionComment}">
+        </div>
+        <div class="mb-3">
             <label for="input-consumable-category" class="col-form-label">Категория</label>
             <!--<input type="text" class="form-control" id="input-consumable-category" th:value="${consumable.category.name}">-->
             <select th:field="${consumable.categoryId}" id="model_dropdown" name="model_dropdown">
@@ -48,39 +63,9 @@
                 </option>
             </select>
         </div>
-        <div class="mb-3">
-            <label for="input-transaction-type" class="col-form-label">Статус</label>
-            <input disabled type="text" class="form-control" name="type" id="input-transaction-type"
-                   th:value="${consumable.status}">
-        </div>
-        <button th:method="delete" th:action="@{/consumables/{id}(id=${consumable.id})}" type="button"
-                class="btn btn-danger btn-sm">Удалить!
-        </button>
         <button type="submit" class="btn btn-success btn-sm">Сохранить</button>
         <button onclick="window.history.back()" type="button" class="btn btn-secondary btn-sm">Отмена</button>
     </form>
-    <h3>Транзакции</h3>
-    <table class="table table-hover table-sm">
-        <caption title="Транзакции"></caption>
-        <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Дата и время</th>
-            <th scope="col">Тип транзакции</th>
-            <th scope="col">Инициатор</th>
-            <th scope="col">Комментарий</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="entry : ${transactions_list}">
-            <td th:text="${entry.id}"></td>
-            <td th:text="${entry.dateTime}"></td>
-            <td th:text="${entry.type}"></td>
-            <td th:text="${entry.author.name}"></td>
-            <td th:text="${entry.comment}"></td>
-        </tr>
-        </tbody>
-    </table>
 </div>
 </body>
 </html>

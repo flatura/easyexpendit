@@ -10,16 +10,36 @@ public class ConsumableDto {
     private Integer price;
     private String partNumber;
     private Integer categoryId;
-    private Status status;
+    private String status;
+    private Integer count;
+    private String transactionComment;
 
-    public ConsumableDto(String id, String name, String contract, Integer price, String partNumber, Integer category, Status status) {
+    public ConsumableDto(String id, String name, String contract, Integer price, String partNumber, Integer categoryId, String status, Integer count, String transactionComment) {
         this.id = id;
         this.name = name;
         this.contract = contract;
         this.price = price;
         this.partNumber = partNumber;
-        this.categoryId = category;
+        this.categoryId = categoryId;
         this.status = status;
+        this.count = count;
+        this.transactionComment = transactionComment;
+    }
+
+    public String getTransactionComment() {
+        return transactionComment;
+    }
+
+    public void setTransactionComment(String transactionComment) {
+        this.transactionComment = transactionComment;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public String getId() {
@@ -70,11 +90,11 @@ public class ConsumableDto {
         this.categoryId = categoryId;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -86,6 +106,8 @@ public class ConsumableDto {
                 c.getPrice(),
                 c.getPartNumber(),
                 c.getCategory().getId(),
-                c.getStatus());
+                c.getStatus().name(),
+                0,
+                "");
     }
 }

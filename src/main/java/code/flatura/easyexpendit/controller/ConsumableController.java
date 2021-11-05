@@ -13,10 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.*;
@@ -49,6 +46,30 @@ public class ConsumableController {
         return new ModelAndView("consumables_all", model);
     }
 
+    @GetMapping("/consumables/add")
+    public ModelAndView createFormDisplay(Map<String, Object> model) {
+        LOG.info("User {} wants to create new consumable. Display form", getLoggedUserId());
+        model.put("consumable", new ConsumableDto("", "", "", 0, "", 0, Status.AVAILABLE.name(), 1, ""));
+        model.put("categories_list", categoryService.getAll());
+        return new ModelAndView("consumable_add_form", model);
+    }
+
+    @PostMapping("/consumables/add")
+    public ModelAndView createFormSubmit(Map<String, Object> model,
+                                         @ModelAttribute(value = "consumable") ConsumableDto newDto) {
+        LOG.info("User {} wants to save newly created {} new consumables with name {}", getLoggedUserId(), newDto.getCount(), newDto.getName());
+        newDto.setStatus(Status.AVAILABLE.name());
+        if (newDto.getCount() != null && newDto.getCount() >= 1) {
+            List<Consumable> result = consumableService.create(newDto);
+            if (result.size() > 0) {
+                LOG.info("Consumables {} created {} times successfully", newDto.getName(), newDto.getCount());
+            }
+        } else {
+            LOG.warn("Bad count. Canceling request. Redirecting home");
+        }
+        return new ModelAndView("redirect:/consumables", model);
+    }
+
     @GetMapping("/consumables/edit")
     public ModelAndView saveFormDisplay(Map<String, Object> model,
                                         @RequestParam(name = "id") String idStr) {
@@ -58,7 +79,7 @@ public class ConsumableController {
             Optional<Consumable> consumable = consumableService.findById(consumableId);
             if (consumable.isPresent()) {
                 List<Transaction> transactions = transactionService.getAllByConsumableId(consumableId);
-                transactions.sort(Comparator.comparing(Transaction::getDateTime));
+                transactions.sort(Comparator.comparing(Transaction::getDateTime).reversed());
                 List<Category> categories = categoryService.getAll();
 
                 model.put("consumable", ConsumableDto.convertFrom(consumable.get()));
@@ -119,7 +140,7 @@ public class ConsumableController {
     @GetMapping("/consumables/search")
     public ModelAndView findByWord(@RequestParam(name = "word") @Validated String word, Map<String, Object> model) {
         UUID loggedUser = getLoggedUserId();
-        LOG.info("User {} wants to get list of consumables that contains: {}", loggedUser, word);
+        LOG.info("User {} wants to get list of consumables that contain: {}", loggedUser, word);
         // TODO: разбиение на слова и поиск по всем словам, затем объединение списков
         List<Consumable> result;
         if (word.matches(REGEX_WORDS)) {
@@ -201,5 +222,23 @@ public class ConsumableController {
             model.put("consumables_list", result);
         }
         return new ModelAndView("consumables_available", model);
+    }
+
+    @PostMapping("/consumables/delete")
+    public ModelAndView deleteById(@RequestParam(name = "id") @NotNull String idStr, Map<String, Object> model) {
+        UUID consumableId;
+        LOG.info("User {} wants to delete consumable with id {}", getLoggedUserId(), idStr);
+        // TODO: Валидация comment
+        try {
+            consumableId = UUID.fromString(idStr);
+            if (consumableService.deleteById(consumableId)) {
+                LOG.info("Deletion complete. All transactions related to consumable have been also deleted");
+            }
+        } catch (IllegalArgumentException e) {
+            LOG.warn("Bad UUID. Canceling request. Redirecting home");
+
+        }
+
+        return new ModelAndView("redirect:/consumables", model);
     }
 }

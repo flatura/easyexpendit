@@ -37,14 +37,13 @@ public class Consumable {
     public Consumable() {
     }
 
-    public Consumable(String name, String contract, Integer price, String partNumber, Category category, Status status, Set<Transaction> transactions) {
+    public Consumable(String name, String contract, Integer price, String partNumber, Category category, Status status) {
         this.name = name;
         this.contract = contract;
         this.price = price;
         this.partNumber = partNumber;
         this.category = category;
         this.status = status;
-        this.transactions = transactions;
     }
 
     public UUID getId() {

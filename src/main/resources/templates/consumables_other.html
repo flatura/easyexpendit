@@ -71,12 +71,8 @@
                         -->
                     </a>
                 </form>
-                <form action="/consumables/edit" method="get" class="row row-cols-sm-auto align-items-right">
-                    <div class="mb-1">
-                        <input type="hidden" th:name="id" th:value="${entry.id}"/>
-                        <button type="submit" class="btn btn-secondary btn-sm">Редактировать</button>
-                    </div>
-                </form>
+                <div th:insert="fragments/consumables_edit_button_form"></div>
+                <div th:insert="fragments/consumables_delete_button_form"></div>
             </td>
         </tr>
         </tbody>
