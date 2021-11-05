@@ -10,122 +10,104 @@
 <body style="padding-top: 55px">
 <div th:insert="fragments/menu"></div>
 <h1>Все расходники</h1>
-<nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-        <button type="button" class="btn btn-info" data-bs-toggle="modal"
+<div class="container-fluid">
+    <nav class="navbar navbar-light bg-light">
+
+        <!--<button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
                 data-bs-target="#modalWindowDelete">Добавить
-            <!--<span class="glyphicon glyphicon-wrench"></span>-->
-        </button>
-        <form action="/consumables/filtered">
-            <button type="submit" class="btn btn-primary" value="INCOMING" th:name="status" th:value="INCOMING">
+            &lt;!&ndash;<span class="glyphicon glyphicon-wrench"></span>&ndash;&gt;
+        </button>-->
+        <!--<form action="/consumables/filtered">
+            <button type="submit" class="btn btn-primary btn-sm" value="INCOMING" th:name="status" th:value="INCOMING">
                 Заказанные
             </button>
-            <button type="submit" class="btn btn-success" value="AVAILABLE" th:name="status" th:value="AVAILABLE">В
+            <button type="submit" class="btn btn-success btn-sm" value="AVAILABLE" th:name="status"
+                    th:value="AVAILABLE">В
                 наличии
             </button>
-            <button type="submit" class="btn btn-info" value="IN_WORK" th:name="status" th:value="IN_WORK">В работе
+            <button type="submit" class="btn btn-info btn-sm" value="IN_WORK" th:name="status" th:value="IN_WORK">В
+                работе
             </button>
-            <button type="submit" class="btn btn-warning" value="END_OF_WORK" th:name="status" th:value="END_OF_WORK">
+            <button type="submit" class="btn btn-warning btn-sm" value="END_OF_WORK" th:name="status"
+                    th:value="END_OF_WORK">
                 Снятые
             </button>
-            <button type="submit" class="btn btn-secondary" value="DELETED" th:name="status" th:value="DELETED">
+            <button type="submit" class="btn btn-secondary btn-sm" value="DELETED" th:name="status" th:value="DELETED">
                 Списанные
             </button>
-        </form>
+        </form>-->
         <form class="form-inline d-flex" action="/consumables/search">
             <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Поиск" th:name="word">
-            <button class="btn btn-success my-2 my-sm-0" type="submit">Поиск</button>
+            <button class="btn btn-success my-2 my-sm-0 btn-sm" type="submit">Поиск</button>
         </form>
-    </div>
-</nav>
+    </nav>
+    <table class="table table-hover table-sm">
+        <thead>
+        <tr>
+            <th scope="col">Наименование расходника</th>
+            <th scope="col">Контракт</th>
+            <th scope="col">Цена</th>
+            <th scope="col">p/n</th>
+            <th scope="col">Категория</th>
+            <!--<th scope="col">Статус</th>-->
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${consumables_list}">
+            <td th:text="${entry.name}"></td>
+            <td th:text="${entry.contract}"></td>
+            <td th:text="${entry.price}"></td>
+            <td th:text="${entry.partNumber}"></td>
+            <td th:text="${entry.category.name}"></td>
+            <!--<td th:text="${entry.status}"></td>-->
 
-
-<table class="table table-hover table-sm">
-    <thead>
-    <tr>
-        <th scope="col">Наименование расходника</th>
-        <th scope="col">Контракт</th>
-        <th scope="col">Цена</th>
-        <th scope="col">p/n</th>
-        <th scope="col">Категория</th>
-        <!--<th scope="col">Статус</th>-->
-        <th scope="col"></th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="entry : ${consumables_list}">
-        <td th:text="${entry.name}"></td>
-        <td th:text="${entry.contract}"></td>
-        <td th:text="${entry.price}"></td>
-        <td th:text="${entry.partNumber}"></td>
-        <td th:text="${entry.category.name}"></td>
-        <!--<td th:text="${entry.status}"></td>-->
-
-        <td>
-            <!-- Proceed consumable Form-->
-            <form action="/consumables/proceed/" method="post" class="row row-cols-sm-auto g-4 align-items-right">
-                <a class="col-3">
-                    <input type="text" class="form-control" name="comment_name" id="comment_id"
-                           th:name="comment"/>
-                    <input type="hidden" th:name="id" th:value="${entry.id}"/>
-                </a>
-                <a th:switch="${entry.status}">
+            <td>
+                <!-- Proceed consumable Form-->
+                <form action="/consumables/proceed/" method="post" class="row row-cols-sm-auto g-4 align-items-right">
+                    <a class="col-3">
+                        <input type="text" class="form-control" name="comment_name" id="comment_id"
+                               th:name="comment"/>
+                        <input type="hidden" th:name="id" th:value="${entry.id}"/>
+                    </a>
+                    <a th:switch="${entry.status}">
                         <span th:case=${T(code.flatura.easyexpendit.model.Status).PLANNING}>
-                            <button type="submit" class="btn btn-secondary" value="INCOMING"
+                            <button type="submit" class="btn btn-secondary btn-sm" value="INCOMING"
                                     th:name="status">Заказан</button>
                         </span>
-                    <span th:case=${T(code.flatura.easyexpendit.model.Status).INCOMING}>
-                            <button type="submit" class="btn btn-primary" value="AVAILABLE" th:name="status">Оприходовать</button>
+                        <span th:case=${T(code.flatura.easyexpendit.model.Status).INCOMING}>
+                            <button type="submit" class="btn btn-primary btn-sm" value="AVAILABLE" th:name="status">Оприходовать</button>
                         </span>
-                    <span th:case=${T(code.flatura.easyexpendit.model.Status).AVAILABLE}>
-                            <button type="submit" class="btn btn-success" value="IN_WORK"
+                        <span th:case=${T(code.flatura.easyexpendit.model.Status).AVAILABLE}>
+                            <button type="submit" class="btn btn-success btn-sm" value="IN_WORK"
                                     th:name="status">Установить</button>
                         </span>
-                    <span th:case=${T(code.flatura.easyexpendit.model.Status).IN_WORK}>
-                            <button type="submit" class="btn btn-info" value="END_OF_WORK"
+                        <span th:case=${T(code.flatura.easyexpendit.model.Status).IN_WORK}>
+                            <button type="submit" class="btn btn-info btn-sm" value="END_OF_WORK"
                                     th:name="status">Снять</button>
                         </span>
-                    <span th:case=${T(code.flatura.easyexpendit.model.Status).END_OF_WORK}>
-                            <button type="submit" class="btn btn-warning" value="DELETED" th:value="END_OF_WORK"
+                        <span th:case=${T(code.flatura.easyexpendit.model.Status).END_OF_WORK}>
+                            <button type="submit" class="btn btn-warning btn-sm" value="DELETED" th:value="END_OF_WORK"
                                     th:name="status">Списать</button>
                         </span>
-                    <!--
-                    <span th:case=${T(code.flatura.easyexpendit.model.Status).DISPOSABLE}>
-                        <button type="button" class="btn btn-danger">Удалить</button>
-                    </span>
-                    -->
-                </a>
-                <a>
-                    <!-- Modal Edit window -->
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
-                            data-bs-target="#modalWindowEdit" data-consumable-id="111112" data-consumable-name="Вася"
-                            data-contract="Контакт 1" data-part-number="PART112"
-                            data-transaction-type="1"
-                            data-transaction-comment="Комментарий">
-                        <!--data-consumable-id="$(entry.id)"-->
-                        <!--data-consumable-name="${entry.name} "-->
-                        <!--data-contract="${entry.contract}"-->
-                        <!--data-part-number="${entry.partNumber}"-->
-                        <!--data-transaction-type="${entry.status}"-->
-                        <!--data-transaction-comment="${entry.comment} ">-->
-
-                        <!--<span class="glyphicon glyphicon-wrench"></span>-->
-                        Ред.
-                    </button>
-                </a>
-                <a>
-                    <!-- Delete modal window -->
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#modalWindowDelete">Удалить
-                        <!--<span class="glyphicon glyphicon-wrench"></span>-->
-                    </button>
-                </a>
-            </form>
-        </td>
-    </tr>
-    </tbody>
-</table>
-
+                        <!--
+                        <span th:case=${T(code.flatura.easyexpendit.model.Status).DISPOSABLE}>
+                            <button type="button" class="btn btn-danger">Удалить</button>
+                        </span>
+                        -->
+                    </a>
+                </form>
+                <form action="/consumables/edit" method="get" class="row row-cols-sm-auto align-items-right">
+                    <div class="mb-1">
+                        <input type="hidden" th:name="id" th:value="${entry.id}"/>
+                        <button type="submit" class="btn btn-secondary btn-sm">Редактировать</button>
+                    </div>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 <!-- modal window -->
 <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
     <div class="modal-dialog">

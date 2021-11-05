@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -21,8 +23,12 @@ public class CategoryService {
     }
 
     public List<Category> getAll() {
-        LOG.info("Get all");
+        LOG.info("Get all categories");
         return categoryRepository.findAll();
     }
 
+    public Optional<Category> findById(Integer categoryId) {
+        LOG.info("Find category by id");
+        return categoryRepository.findById(categoryId);
+    }
 }

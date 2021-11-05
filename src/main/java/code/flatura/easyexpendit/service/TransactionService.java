@@ -49,4 +49,8 @@ public class TransactionService {
         LOG.info("New transaction created: consumable {}, status {}, comment {}, author {}", consumable.getName(), status.name(), comment, SecurityUtil.getLoggedUser().getName());
         return result;
     }
+
+    public List<Transaction> getAllByConsumableId(UUID consumableId) {
+        return transactionRepository.findByConsumable_Id(consumableId);
+    }
 }
