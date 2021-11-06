@@ -1,6 +1,7 @@
-<form action="/consumables/edit" method="get" class="row row-cols-sm-auto align-items-right">
+<form action="/consumables/edit" method="get" class="form-inline">
     <div class="mb-1">
         <input type="hidden" th:name="id" th:value="${entry.id}"/>
-        <button type="submit" class="btn btn-secondary btn-sm">Редактировать</button>
+        <button type="submit" class="btn btn-labeled btn-secondary" title="Редактировать">
+            <span class="btn-label"><i class="fa fa-cog"></i></span></button>
     </div>
 </form>

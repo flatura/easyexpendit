@@ -196,7 +196,7 @@ public class ConsumableController {
                 .collect(Collectors.toList());
         LOG.info("Found {} results for user {}", filteredResult.size(), loggedUser);
         model.put("consumables_list", filteredResult);
-        return new ModelAndView("consumables_other", model);
+        return new ModelAndView("consumables_all", model);
     }
 
     @GetMapping("/consumables/available")
@@ -221,7 +221,7 @@ public class ConsumableController {
             result.sort(Comparator.comparing(Consumable::getName));
             model.put("consumables_list", result);
         }
-        return new ModelAndView("consumables_available", model);
+        return new ModelAndView("consumables_all", model);
     }
 
     @PostMapping("/consumables/delete")

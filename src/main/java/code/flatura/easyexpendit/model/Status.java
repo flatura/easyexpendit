@@ -6,6 +6,5 @@ public enum Status {
     AVAILABLE,
     IN_WORK,
     END_OF_WORK,
-    DISPOSABLE,
-    REMOVED
+    DELETED
 }

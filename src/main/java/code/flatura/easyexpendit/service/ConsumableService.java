@@ -47,9 +47,13 @@ public class ConsumableService {
                 transactionService.create(newStatus, c, comment, authorId);
                 consumableRepository.saveAndFlush(c);
                 LOG.info("Consumable [] proceeded to status {} successfully", consumableId, newStatus);
+            } else {
+                LOG.warn("Requirements for changing consumable status have not been satisfied: {} to {}", c.getStatus(), newStatus);
             }
+        } else {
+            LOG.warn("Consumable does not exist in DB");
         }
-        LOG.warn("Requirements for changing consumable status have not been satisfied");
+
         return false;
     }
 

@@ -12,7 +12,6 @@
 <h1>Все расходники</h1>
 <div class="container-fluid">
     <nav class="navbar navbar-light bg-light">
-
         <!--<button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal"
                 data-bs-target="#modalWindowDelete">Добавить
             &lt;!&ndash;<span class="glyphicon glyphicon-wrench"></span>&ndash;&gt;
@@ -41,64 +40,71 @@
             <button class="btn btn-success my-2 my-sm-0 btn-sm" type="submit">Поиск</button>
         </form>
     </nav>
-    <table class="table table-hover table-sm">
+    <table class="table table-hover table-sm fixed">
         <thead>
         <tr>
-            <th scope="col">Наименование расходника</th>
-            <th scope="col">Контракт</th>
-            <th scope="col">Цена</th>
-            <th scope="col">p/n</th>
-            <th scope="col">Категория</th>
-            <!--<th scope="col">Статус</th>-->
-            <th scope="col"></th>
+            <th style="width:35%" scope="col">Наименование расходника</th>
+            <th style="width:15%" scope="col">Контракт</th>
+            <th style="width:5%" scope="col">Цена</th>
+            <th style="width:10%" scope="col">p/n</th>
+            <th style="width:15%" scope="col">Категория</th>
+            <th style="width:20%" scope="col"></th>
         </tr>
         </thead>
         <tbody>
+        <!--<tr class="table-success" th:each="entry : ${consumables_list}">-->
         <tr th:each="entry : ${consumables_list}">
             <td th:text="${entry.name}"></td>
             <td th:text="${entry.contract}"></td>
             <td th:text="${entry.price}"></td>
             <td th:text="${entry.partNumber}"></td>
             <td th:text="${entry.category.name}"></td>
-            <!--<td th:text="${entry.status}"></td>-->
-
             <td>
-                <!-- Proceed consumable Form-->
-                <form action="/consumables/proceed/" method="post" class="row row-cols-sm-auto g-4 align-items-right">
-                    <a class="col-3">
-                        <input type="text" class="form-control" name="comment_name" id="comment_id"
-                               th:name="comment"/>
-                        <input type="hidden" th:name="id" th:value="${entry.id}"/>
-                    </a>
-                    <a th:switch="${entry.status}">
-                        <span th:case=${T(code.flatura.easyexpendit.model.Status).PLANNING}>
-                            <button type="submit" class="btn btn-secondary btn-sm" value="INCOMING"
-                                    th:name="status">Заказан</button>
-                        </span>
-                        <span th:case=${T(code.flatura.easyexpendit.model.Status).INCOMING}>
-                            <button type="submit" class="btn btn-primary btn-sm" value="AVAILABLE" th:name="status">Оприходовать</button>
-                        </span>
-                        <span th:case=${T(code.flatura.easyexpendit.model.Status).AVAILABLE}>
-                            <button type="submit" class="btn btn-success btn-sm" value="IN_WORK"
-                                    th:name="status">Установить</button>
-                        </span>
-                        <span th:case=${T(code.flatura.easyexpendit.model.Status).IN_WORK}>
-                            <button type="submit" class="btn btn-info btn-sm" value="END_OF_WORK"
-                                    th:name="status">Снять</button>
-                        </span>
-                        <span th:case=${T(code.flatura.easyexpendit.model.Status).END_OF_WORK}>
-                            <button type="submit" class="btn btn-warning btn-sm" value="DELETED" th:value="END_OF_WORK"
-                                    th:name="status">Списать</button>
-                        </span>
-                        <!--
-                        <span th:case=${T(code.flatura.easyexpendit.model.Status).DISPOSABLE}>
-                            <button type="button" class="btn btn-danger">Удалить</button>
-                        </span>
-                        -->
-                    </a>
-                </form>
-                <div th:insert="fragments/consumables_edit_button_form"></div>
-                <div th:insert="fragments/consumables_delete_button_form"></div>
+                <div class="row">
+                    <div class="col-6">
+                        <form class="row" action="/consumables/proceed/" method="post">
+                            <div class="col-8">
+                                <input type="text" class="form-control" name="comment_name" id="comment_id"
+                                       th:name="comment"/>
+                                <input type="hidden" th:name="id" th:value="${entry.id}"/>
+                            </div>
+                            <div class="col-2" th:switch="${entry.status}">
+                                <div th:case=${T(code.flatura.easyexpendit.model.Status).PLANNING}>
+                                    <button type="submit" class="btn btn-labeled btn-secondary" value="INCOMING"
+                                            th:name="status" title="Заказан">
+                                        <span class="btn-label"><i class="fa fa-clock"></i></span>
+                                    </button>
+                                </div>
+                                <div th:case=${T(code.flatura.easyexpendit.model.Status).INCOMING}>
+                                    <button type="submit" class="btn btn-labeled btn-primary" value="AVAILABLE"
+                                            th:name="status" title="Оприходовать">
+                                        <span class="btn-label"><i class="fa fa-download"></i></span>
+                                    </button>
+                                </div>
+                                <div th:case=${T(code.flatura.easyexpendit.model.Status).AVAILABLE}>
+                                    <button type="submit" class="btn btn-labeled btn-success" value="IN_WORK"
+                                            th:name="status" title="Установить / использовать / выдать">
+                                        <span class="btn-label"><i class="fa fa-download"></i></span>
+                                    </button>
+                                </div>
+                                <div th:case=${T(code.flatura.easyexpendit.model.Status).IN_WORK}>
+                                    <button type="submit" class="btn btn-labeled btn-info" value="END_OF_WORK"
+                                            th:name="status" title="Снять / демонтировать / забрать">
+                                        <span class="btn-label"><i class="fa fa-undo"></i></span>
+                                    </button>
+                                </div>
+                                <div th:case=${T(code.flatura.easyexpendit.model.Status).END_OF_WORK}>
+                                    <button type="submit" class="btn btn-labeled btn-warning" value="DELETED"
+                                            th:name="status" title="Выбросить">
+                                        <span class="btn-label"><i class="fa fa-angle-double-down"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-2" th:insert="fragments/consumables_edit_button_form"></div>
+                    <div class="col-2" th:insert="fragments/consumables_delete_button_form"></div>
+                </div>
             </td>
         </tr>
         </tbody>
