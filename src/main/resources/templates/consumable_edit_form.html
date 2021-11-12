@@ -53,7 +53,13 @@
             <input disabled type="text" class="form-control" name="type" id="input-transaction-type"
                    th:value="${consumable.status}">
         </div>
-        <button th:method="delete" th:action="@{/consumables/{id}(id=${consumable.id})}" type="button"
+        <div class="mb-3">
+            <label for="input-consumable-transaction-comment" class="col-form-label">Комментарий к последней
+                транзакции</label>
+            <input type="text" class="form-control" name="transactionComment" id="input-consumable-transaction-comment"
+                   th:value="${consumable.transactionComment}">
+        </div>
+        <button th:method="post" th:action="@{/consumables/{id}(id=${consumable.id})}" type="button"
                 class="btn btn-danger btn-sm">Удалить!
         </button>
         <button type="submit" class="btn btn-success btn-sm">Сохранить</button>

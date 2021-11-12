@@ -8,7 +8,6 @@ import code.flatura.easyexpendit.model.Status;
 import code.flatura.easyexpendit.model.Transaction;
 import code.flatura.easyexpendit.repository.datajpa.CategoryRepository;
 import code.flatura.easyexpendit.repository.datajpa.ConsumableRepository;
-import code.flatura.easyexpendit.repository.datajpa.TransactionRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,9 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class ConsumableService {
     private static final Logger LOG = getLogger(ConsumableService.class);
 
-    private ConsumableRepository consumableRepository;
-    private TransactionService transactionService;
-    private CategoryRepository categoryRepository;
+    private final ConsumableRepository consumableRepository;
+    private final TransactionService transactionService;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
     public ConsumableService(ConsumableRepository consumableRepository, TransactionService transactionService, CategoryRepository categoryRepository) {
@@ -44,6 +43,7 @@ public class ConsumableService {
             // TODO: предусмотреть вариант с установкой более раннего статуса - найти все транзакции между статусами и удалить их
             if (newStatus.compareTo(c.getStatus()) > 0) {
                 c.setStatus(newStatus);
+                c.setComment(comment);
                 transactionService.create(newStatus, c, comment, authorId);
                 consumableRepository.saveAndFlush(c);
                 LOG.info("Consumable [] proceeded to status {} successfully", consumableId, newStatus);
@@ -79,8 +79,7 @@ public class ConsumableService {
     public Consumable update(ConsumableDto modified, UUID consumableId) {
 
         Optional<Consumable> oldOpt = consumableRepository.findById(consumableId);
-
-        if (oldOpt.isPresent()) {
+        if (oldOpt.isPresent() && oldOpt.get().getId().equals(consumableId)) {
             Consumable old = oldOpt.get();
             if (modified.getName() != null) old.setName(modified.getName());
             if (modified.getContract() != null) old.setContract(modified.getContract());
@@ -89,11 +88,13 @@ public class ConsumableService {
             if (!old.getCategory().getId().equals(modified.getCategoryId())) {
                 Optional<Category> categoryOpt = categoryRepository.findById(modified.getCategoryId());
                 categoryOpt.ifPresent(old::setCategory);
+            } else {
+                LOG.warn("Category doesn't exist in DB. Canceling request. Redirecting home");
             }
             // Ignoring status because it is changed by Proceed() and Revert()
             return consumableRepository.saveAndFlush(old);
         } else {
-            LOG.warn("Consumable or Category doesn't exist in DB. Canceling request. Redirecting home");
+            LOG.warn("Consumable doesn't exist in DB. Canceling request. Redirecting home");
             return null;
         }
     }
@@ -112,7 +113,8 @@ public class ConsumableService {
                             newDto.getPrice(),
                             newDto.getPartNumber(),
                             categoryOpt.get(),
-                            Status.valueOf(newDto.getStatus())));
+                            Status.valueOf(newDto.getStatus()),
+                            newDto.getTransactionComment()));
                 }
                 result = consumableRepository.saveAllAndFlush(createList);
                 List<Transaction> resultTransactions = transactionService.createMultiple(

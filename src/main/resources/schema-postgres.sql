@@ -50,14 +50,15 @@ CREATE TABLE categories
 
 CREATE TABLE consumable
 (
-  id          UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  name        VARCHAR(255) NOT NULL,
-  contract    VARCHAR(255),
-  price       INTEGER,
-  part_number VARCHAR(30),
-  category_id INTEGER,
-  status      INTEGER      NOT NULL,
-  FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL
+    id          UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    name        VARCHAR(255) NOT NULL,
+    contract    VARCHAR(255),
+    price       INTEGER,
+    part_number VARCHAR(30),
+    category_id INTEGER,
+    status      INTEGER      NOT NULL,
+    comment     VARCHAR(255),
+    FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL
 );
 
 CREATE TABLE transactions

@@ -28,22 +28,26 @@ public class Consumable {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column(name="status")
+    @Column(name = "status")
     private Status status;
 
     @OneToMany(mappedBy = "consumable")
     private Set<Transaction> transactions;
 
+    @Column(name = "comment")
+    private String comment;
+
     public Consumable() {
     }
 
-    public Consumable(String name, String contract, Integer price, String partNumber, Category category, Status status) {
+    public Consumable(String name, String contract, Integer price, String partNumber, Category category, Status status, String comment) {
         this.name = name;
         this.contract = contract;
         this.price = price;
         this.partNumber = partNumber;
         this.category = category;
         this.status = status;
+        this.comment = comment;
     }
 
     public UUID getId() {
@@ -104,5 +108,13 @@ public class Consumable {
 
     public void setTransactions(Set<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

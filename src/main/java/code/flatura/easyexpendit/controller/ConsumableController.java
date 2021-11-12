@@ -24,9 +24,9 @@ import static code.flatura.easyexpendit.SecurityUtil.getLoggedUserId;
 @Controller
 public class ConsumableController {
     private static final Logger LOG = LoggerFactory.getLogger(ConsumableController.class);
-    private ConsumableService consumableService;
-    private TransactionService transactionService;
-    private CategoryService categoryService;
+    private final ConsumableService consumableService;
+    private final TransactionService transactionService;
+    private final CategoryService categoryService;
     private static final String REGEX_WORD = "^[a-zA-Z0-9а-яА-Я]+$";
     private static final String REGEX_WORDS = "^[a-zA-Z0-9а-яА-Я ]+$";
 
@@ -81,7 +81,7 @@ public class ConsumableController {
                 List<Transaction> transactions = transactionService.getAllByConsumableId(consumableId);
                 transactions.sort(Comparator.comparing(Transaction::getDateTime).reversed());
                 List<Category> categories = categoryService.getAll();
-
+                categories.sort(Comparator.comparing(Category::getName));
                 model.put("consumable", ConsumableDto.convertFrom(consumable.get()));
                 model.put("transactions_list", transactions);
                 model.put("categories_list", categories);
@@ -99,6 +99,7 @@ public class ConsumableController {
 
     @PostMapping("/consumables/edit")
     public ModelAndView saveFormSubmit(Map<String, Object> model,
+                                       @PathVariable(name = "id") String id,
                                        @ModelAttribute(value = "consumable") ConsumableDto modified) {
         LOG.info("User {} wants to save modified consumable with id {}", getLoggedUserId(), modified.getId());
         Consumable result;
