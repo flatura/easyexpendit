@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div th:insert="fragments/style_css"></div>
+    <title>EasyExpendit: Edit Category</title>
+</head>
+<body style="padding-top: 55px">
+<div th:insert="fragments/menu"></div>
+<div class="container-fluid">
+    <h4>Edit Category</h4>
+    <form action="#" method="post" th:action="@{/categories/${category.id}}" th:object="${category}">
+        <div class="mb-3">
+            <label for="input-category-id" class="col-form-label">ID категории</label>
+            <input disabled type="text" class="form-control" id="input-category-id" th:value="${category.id}">
+            <input type="hidden" name="id" th:value="${category.id}">
+        </div>
+        <div class="mb-3">
+            <label for="input-category-name" class="col-form-label">Наименование категории</label>
+            <input type="text" class="form-control" name="name" id="input-category-name"
+                   th:value="${category.name}">
+        </div>
+        <div class="mb-3">
+            <label for="input-category-parent" class="col-form-label">Родительская категория</label>
+            <!--<input type="text" class="form-control" id="input-consumable-category" th:value="${consumable.category.name}">-->
+            <select th:field="${category.id}" id="model_dropdown" name="model_dropdown">
+                <option th:each="category : ${categories_list}"
+                        th:value="${category.id}"
+                        th:text="${category.id}+' : '+${category.name}">
+                    Выбери категорию
+                </option>
+            </select>
+        </div>
+        <form action="/categories/delete" method="post" class="col">
+            <div class="mb-1">
+                <input type="hidden" th:name="id" th:value="${category.id}"/>
+                <button type="submit" class="btn btn-labeled btn-danger" title="Удалить из системы">
+                    <span class="btn-label"><i class="fa fa-remove"></i></span></button>
+            </div>
+        </form>
+        <button type="submit" class="btn btn-success btn-sm">Сохранить</button>
+        <button onclick="window.history.back()" type="button" class="btn btn-secondary btn-sm">Отмена</button>
+    </form>
+    <div th:insert="fragments/style_scripts"></div>
+</body>
+</html>

@@ -15,7 +15,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Service
 public class CategoryService {
     private static final Logger LOG = getLogger(CategoryService.class);
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
     public CategoryService(CategoryRepository categoryRepository) {
@@ -27,8 +27,8 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    public Optional<Category> findById(Integer categoryId) {
+    public Category findById(Integer categoryId) {
         LOG.info("Find category by id");
-        return categoryRepository.findById(categoryId);
+        return categoryRepository.findById(categoryId).orElse(new Category());
     }
 }

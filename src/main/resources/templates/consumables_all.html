@@ -63,14 +63,14 @@
             <td th:text="${entry.comment}"></td>
             <td>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-10">
                         <form class="row" action="/consumables/proceed/" method="post">
-                            <div class="col-8">
+                            <div class="col-10">
                                 <input type="text" class="form-control" name="comment_name" id="comment_id"
                                        th:name="comment"/>
                                 <input type="hidden" th:name="id" th:value="${entry.id}"/>
                             </div>
-                            <div class="col-2" th:switch="${entry.status}">
+                            <div class="col-1" th:switch="${entry.status}">
                                 <div th:case=${T(code.flatura.easyexpendit.model.Status).PLANNING}>
                                     <button type="submit" class="btn btn-labeled btn-secondary" value="INCOMING"
                                             th:name="status" title="Заказан">
@@ -105,7 +105,7 @@
                         </form>
                     </div>
                     <div class="col-2" th:insert="fragments/consumables_edit_button_form"></div>
-                    <div class="col-2" th:insert="fragments/consumables_delete_button_form"></div>
+                    <!--                    <div class="col-2" th:insert="fragments/consumables_delete_button_form"></div>-->
                 </div>
             </td>
         </tr>

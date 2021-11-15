@@ -13,14 +13,14 @@
 <table class="table table-hover table-sm">
     <thead>
     <tr>
-        <th scope="col">ID</th>
-        <th scope="col">User name</th>
-        <th scope="col">Email</th>
-        <th scope="col">Regisetered</th>
-        <th scope="col">Last logon</th>
-        <th scope="col">Enabled</th>
-        <th scope="col">Comment</th>
-        <th scope="col">Roles</th>
+        <th style="width:17%" scope="col">ID пользователя</th>
+        <th style="width:20%" scope="col">Имя пользователя</th>
+        <th style="width:10%" scope="col">E-mail</th>
+        <th style="width:8%" scope="col">Зарегистрирован</th>
+        <th style="width:8%" scope="col">Последний вход</th>
+        <th style="width:4%" scope="col">Активен?</th>
+        <th style="width:18%" scope="col">Комментарий</th>
+        <th style="width:17%" scope="col">Роли</th>
     </tr>
     </thead>
     <tbody>
@@ -28,9 +28,9 @@
         <td th:text="${entry.id}"></td>
         <td th:text="${entry.name}"></td>
         <td th:text="${entry.email}"></td>
-        <td th:text="${entry.registered}"></td>
-        <td th:text="${entry.lastLogon}"></td>
-        <td th:text="${entry.enabled}"></td>
+        <td th:text="${#temporals.format(entry.registered, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${#temporals.format(entry.lastLogon, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${entry.enabled ? 'Активен' : 'заблокирован'}"></td>
         <td th:text="${entry.comment}"></td>
         <td th:text="${entry.roles}"></td>
     </tr>
