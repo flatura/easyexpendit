@@ -1,6 +1,6 @@
 package code.flatura.easyexpendit.controller;
 
-import code.flatura.easyexpendit.SecurityUtil;
+
 import code.flatura.easyexpendit.model.Category;
 import code.flatura.easyexpendit.service.CategoryService;
 import org.slf4j.Logger;
@@ -14,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
+
+import static code.flatura.easyexpendit.config.SecurityUtil.getLoggedUserId;
 
 @Controller("/categories")
 public class CategoryController {
@@ -34,7 +36,7 @@ public class CategoryController {
     public ModelAndView editByIdForm(Map<String, Object> model,//) {
                                      @RequestParam(name = "id") String idStr) {
         //String idStr = (String) model.get("id");
-        LOG.info("User {} wants to edit Category with id {}", SecurityUtil.getLoggedUserId(), idStr);
+        LOG.info("User {} wants to edit Category with id {}", getLoggedUserId(), idStr);
         try {
             Category result = categoryService.findById(Integer.parseInt(idStr == null ? "" : idStr));
             model.put("category", result);
@@ -53,7 +55,7 @@ public class CategoryController {
     @PostMapping("/categories/{id}")
     public ModelAndView editByIdFormSubmit(Map<String, Object> model,
                                            @PathVariable(name = "id") String idStr) {
-        LOG.info("User {} wants to save edited Category with id {}", SecurityUtil.getLoggedUserId(), idStr);
+        LOG.info("User {} wants to save edited Category with id {}", getLoggedUserId(), idStr);
 
         return new ModelAndView("redirect:/categories", model);
     }

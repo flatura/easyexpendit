@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" xmlns:th="http://www.w3.org/1999/xhtml">
     <div class="container-fluid">
         <a class="navbar-brand mb-0 h1">EasyExpendIt</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -13,7 +13,6 @@
                 <!--<a class="nav-link" href="/categories">Categories</a>-->
                 <!--<a class="nav-link" href="/users">Users</a></a>-->
                 <!--<a class="nav-link" href="/roles">Roles</a></a>-->
-
                 <!--Russian-->
                 <a class="nav-link" href="/consumables">Всё</a>
                 <a class="nav-link" href="/consumables/available">Доступное</a>
@@ -23,8 +22,15 @@
                 <a class="nav-link" href="/categories">Категории</a>
                 <a class="nav-link" href="/users">Пользователи</a>
                 <a class="nav-link" href="/roles">Роли</a>
-
             </div>
         </div>
+        <form class="d-flex" th:action="@{/logout}" method="post">
+            <!--            <div sec:authentication="name" name="name"></div>-->
+            <div class="navbar-text me-2" th:text="${#authentication.getPrincipal().getUsername()}"></div>
+            <button type="submit" class="btn btn-labeled btn-warning"
+                    th:name="status" title="Выйти из системы">
+                <span class="btn-label"><i class="fa fa-power-off"></i></span>
+            </button>
+        </form>
     </div>
 </nav>

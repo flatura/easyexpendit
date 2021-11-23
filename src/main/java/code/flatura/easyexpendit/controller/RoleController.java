@@ -12,7 +12,7 @@ import java.util.Map;
 @Controller
 public class RoleController {
     private static final Logger LOG = LoggerFactory.getLogger(ConsumableController.class);
-    private RoleService roleService;
+    private final RoleService roleService;
 
     public RoleController(RoleService consumableService) {
         this.roleService = consumableService;

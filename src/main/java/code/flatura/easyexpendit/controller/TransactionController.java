@@ -1,5 +1,6 @@
 package code.flatura.easyexpendit.controller;
 
+import code.flatura.easyexpendit.config.SecurityUtil;
 import code.flatura.easyexpendit.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +10,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
+import static code.flatura.easyexpendit.config.SecurityUtil.getLoggedUserId;
+
 @Controller
 public class TransactionController {
     private static final Logger LOG = LoggerFactory.getLogger(TransactionController.class);
-    private TransactionService transactionService;
+    private final TransactionService transactionService;
 
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
@@ -20,7 +23,7 @@ public class TransactionController {
 
     @GetMapping("/transactions")
     public ModelAndView getAll(Map<String, Object> model) {
-        LOG.info("Get all");
+        LOG.info("User {} wants to get all transactions", getLoggedUserId());
         model.put("transactions_list", transactionService.getAll());
         return new ModelAndView("transactions_all", model);
     }

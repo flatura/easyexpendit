@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <div th:insert="fragments/style_css"></div>
+    <meta name="description" content="Login form for EasyExpendIt service">
+    <meta name="author" content="Dmitry 'Flatura' Morozov">
+    <!--    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">-->
+
+    <title>EasyExpendIt форма авторизации</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
+
+    <!-- Bootstrap core CSS -->
+    <!--    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">-->
+
+    <!-- Custom styles for this template -->
+    <!--    <link href="signin.css" rel="stylesheet">-->
+</head>
+
+<body class="text-center">
+<div th:if="${param.logout}">
+    Вы вышли! До новых встреч.
+</div>
+<div th:if="${param.error}">
+    Неправильный логин или пароль
+</div>
+<form class="form-signin" action="/login" method="post">
+    <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72"
+         height="72">
+    <h1 class="h1 mb-3 font-weight-normal">EasyExpendit</h1>
+    <h3 class="h3 mb-3 font-weight-normal">Пожалуйста авторизуйтесь</h3>
+    <!--    <input type="email" id="inputEmail" class="form-control" placeholder="Адрес электронной почты" required autofocus>-->
+    <label for="inputName" class="sr-only">Имя пользователя</label>
+    <input type="text" id="inputName" class="form-control" placeholder="Имя пользователя" name="username" required
+           autofocus>
+    <label for="inputPassword" class="sr-only">Пароль</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" name="password" required>
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" value="remember-me"> Запомнить меня
+        </label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2021 Dmitry 'Flatura' Morozov</p>
+</form>
+</body>
+</html>

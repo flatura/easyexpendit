@@ -14,15 +14,15 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE users
 (
-  id         UUID      DEFAULT uuid_generate_v4() PRIMARY KEY,
-  email      VARCHAR(255)            NOT NULL,
-  password   VARCHAR(20)             NOT NULL,
-  name       VARCHAR(45)             NOT NULL,
-  registered TIMESTAMP DEFAULT now() NOT NULL,
-  last_logon TIMESTAMP,
-  enabled    BOOLEAN   DEFAULT TRUE  NOT NULL,
-  comment    VARCHAR(255),
-  CONSTRAINT unique_user_idx UNIQUE (email)
+    id         UUID      DEFAULT uuid_generate_v4() PRIMARY KEY,
+    email      VARCHAR(255)            NOT NULL,
+    password   VARCHAR(255)            NOT NULL,
+    name       VARCHAR(45)             NOT NULL,
+    registered TIMESTAMP DEFAULT now() NOT NULL,
+    last_logon TIMESTAMP,
+    enabled    BOOLEAN   DEFAULT TRUE  NOT NULL,
+    comment    VARCHAR(255),
+    CONSTRAINT unique_user_idx UNIQUE (email)
 );
 
 CREATE TABLE roles

@@ -12,10 +12,14 @@ DELETE
 FROM users;
 
 INSERT INTO users (id, email, password, name, comment)
-VALUES ('0d9b7adf-7879-4c4d-915f-d7cb0419028a','admin@domain.com','12345','Администратор1',''),
-       ('974fd922-c6e7-4950-ad5b-68be50a2b5ce','admin2@domain.com','12345','Администратор2',''),
-       ('63ee60d7-b779-45bd-89a6-f3607ccab181','user1@domain.com','12345','Пользователь1',''),
-       ('ccd9ef15-e9ac-4a7a-8f36-33d621ef3b91','user2@domain.com','12345','Пользователь2','');
+VALUES ('0d9b7adf-7879-4c4d-915f-d7cb0419028a', 'admin@domain.com',
+        '$2a$12$tZtd7BHTDRjqSUsvB4uSSuvOiQUnPNkSRWxLx6o0xwEBfsrjs4ruW', 'Администратор1', ''),
+       ('974fd922-c6e7-4950-ad5b-68be50a2b5ce', 'admin2@domain.com',
+        '$2a$12$tZtd7BHTDRjqSUsvB4uSSuvOiQUnPNkSRWxLx6o0xwEBfsrjs4ruW', 'Александр Петров', ''),
+       ('63ee60d7-b779-45bd-89a6-f3607ccab181', 'user1@domain.com',
+        '$2a$12$tZtd7BHTDRjqSUsvB4uSSuvOiQUnPNkSRWxLx6o0xwEBfsrjs4ruW', 'Пользователь1', ''),
+       ('ccd9ef15-e9ac-4a7a-8f36-33d621ef3b91', 'user2@domain.com',
+        '$2a$12$tZtd7BHTDRjqSUsvB4uSSuvOiQUnPNkSRWxLx6o0xwEBfsrjs4ruW', 'Лидия Славина', '');
 
 
 INSERT INTO roles (id, name)

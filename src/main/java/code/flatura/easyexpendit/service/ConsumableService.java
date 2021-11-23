@@ -1,6 +1,6 @@
 package code.flatura.easyexpendit.service;
 
-import code.flatura.easyexpendit.SecurityUtil;
+import code.flatura.easyexpendit.config.SecurityUtil;
 import code.flatura.easyexpendit.dto.ConsumableDto;
 import code.flatura.easyexpendit.model.Category;
 import code.flatura.easyexpendit.model.Consumable;
@@ -46,7 +46,7 @@ public class ConsumableService {
                 c.setComment(comment);
                 transactionService.create(newStatus, c, comment, authorId);
                 consumableRepository.saveAndFlush(c);
-                LOG.info("Consumable [] proceeded to status {} successfully", consumableId, newStatus);
+                LOG.info("Consumable {} proceeded to status {} successfully", consumableId, newStatus);
             } else {
                 LOG.warn("Requirements for changing consumable status have not been satisfied: {} to {}", c.getStatus(), newStatus);
             }
@@ -100,7 +100,7 @@ public class ConsumableService {
     }
 
     public List<Consumable> create(ConsumableDto newDto) {
-        List<Consumable> result = new ArrayList<Consumable>();
+        List<Consumable> result = new ArrayList<>();
         if (newDto.getCount() >= 1) {
             Optional<Category> categoryOpt = categoryRepository.findById(newDto.getCategoryId());
 

@@ -11,6 +11,8 @@ import code.flatura.easyexpendit.service.TransactionService;
 import com.sun.istack.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static code.flatura.easyexpendit.SecurityUtil.getLoggedUserId;
+import static code.flatura.easyexpendit.config.SecurityUtil.getLoggedUserId;
 
 @Controller
 public class ConsumableController {
@@ -30,13 +32,15 @@ public class ConsumableController {
     private static final String REGEX_WORD = "^[a-zA-Z0-9а-яА-Я]+$";
     private static final String REGEX_WORDS = "^[a-zA-Z0-9а-яА-Я ]+$";
 
+    @Autowired
     public ConsumableController(ConsumableService consumableService, TransactionService transactionService, CategoryService categoryService) {
         this.consumableService = consumableService;
         this.transactionService = transactionService;
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/consumables")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping({"/", "/consumables"})
     public ModelAndView getAll(Map<String, Object> model) {
         LOG.info("User {} wants to get list of all consumables", getLoggedUserId());
         List<Consumable> result = consumableService.getAll();
@@ -46,6 +50,7 @@ public class ConsumableController {
         return new ModelAndView("consumables_all", model);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/consumables/add")
     public ModelAndView createFormDisplay(Map<String, Object> model) {
         LOG.info("User {} wants to create new consumable. Display form", getLoggedUserId());
@@ -54,6 +59,7 @@ public class ConsumableController {
         return new ModelAndView("consumable_add_form", model);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/consumables/add")
     public ModelAndView createFormSubmit(Map<String, Object> model,
                                          @ModelAttribute(value = "consumable") ConsumableDto newDto) {
@@ -70,6 +76,7 @@ public class ConsumableController {
         return new ModelAndView("redirect:/consumables", model);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/consumables/edit")
     public ModelAndView saveFormDisplay(Map<String, Object> model,
                                         @RequestParam(name = "id") String idStr) {
@@ -96,12 +103,13 @@ public class ConsumableController {
         return new ModelAndView("redirect:/consumables", model);
     }
 
-
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/consumables/edit")
     public ModelAndView saveFormSubmit(Map<String, Object> model,
-                                       @PathVariable(name = "id") String id,
+                                       @RequestParam(name = "id") String id,
                                        @ModelAttribute(value = "consumable") ConsumableDto modified) {
         LOG.info("User {} wants to save modified consumable with id {}", getLoggedUserId(), modified.getId());
+        // TODO: Поломалось удаление...
         Consumable result;
         try {
             result = consumableService.update(modified, UUID.fromString(modified.getId()));
@@ -116,28 +124,29 @@ public class ConsumableController {
         return new ModelAndView("redirect:/consumables", model);
     }
 
-
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping("/consumables/proceed/")
     public String proceed(@RequestParam(name = "id") @NotNull String idStr,
                           @RequestParam(name = "status") @NotNull String newStatus,
                           @RequestParam(name = "comment", required = false) String comment) {
         UUID consumableId;
         Status status;
-        UUID loggedUser = getLoggedUserId();
-        LOG.info("User {} wants to change status of consumable (id {}) to {} with comment: {}", loggedUser, idStr, newStatus, comment);
+        // TODO: Заменить мокнутый loggedUser на настоящий https://www.baeldung.com/get-user-in-spring-security
+        LOG.info("User {} wants to change status of consumable (id {}) to {} with comment: {}", getLoggedUserId(), idStr, newStatus, comment);
         // TODO: Валидация comment
         try {
             consumableId = UUID.fromString(idStr);
             status = Status.valueOf(newStatus);
         } catch (IllegalArgumentException e) {
             LOG.warn("Bad arguments. Canceling request. Redirecting home");
-            return "redirect:/consumables_all";
+            return "redirect:/consumables";
         }
-        consumableService.proceed(consumableId, status, comment, loggedUser);
+        consumableService.proceed(consumableId, status, comment, getLoggedUserId());
         return "redirect:/consumables";
     }
 
     // TODO: объединить  findByWord, findAll, findByStatus и getAllNotAvailable в универсальный метод
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/consumables/search")
     public ModelAndView findByWord(@RequestParam(name = "word") @Validated String word, Map<String, Object> model) {
         UUID loggedUser = getLoggedUserId();
@@ -156,6 +165,7 @@ public class ConsumableController {
         return new ModelAndView("consumables_all", model);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/consumables/status")
     public ModelAndView findByStatus(@RequestParam(name = "status") @Validated String statusStr, Map<String, Object> model) {
         UUID loggedUser = getLoggedUserId();
@@ -174,10 +184,11 @@ public class ConsumableController {
         return new ModelAndView("consumables_all", model);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/consumables/other")
     public ModelAndView getAllNotAvailable(@RequestParam(name = "word", required = false) @Validated String word, Map<String, Object> model) {
         UUID loggedUser = getLoggedUserId();
-        List<Consumable> result = new ArrayList<>();
+        List<Consumable> result;
         if (word != null) {
             if (word.matches(REGEX_WORDS)) {
                 LOG.info("User {} wants to get list of all consumables with other status and contain word: {}", getLoggedUserId(), word);
@@ -200,10 +211,11 @@ public class ConsumableController {
         return new ModelAndView("consumables_all", model);
     }
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/consumables/available")
     public ModelAndView getAllAvailable(@RequestParam(name = "word", required = false) @Validated String word, Map<String, Object> model) {
         UUID loggedUser = getLoggedUserId();
-        List<Consumable> result = new ArrayList<>();
+        List<Consumable> result;
         if (word != null) {
             LOG.info("User {} wants to get list of all available consumables contain word {}", loggedUser, word);
             if (word.matches(REGEX_WORDS)) {
@@ -225,8 +237,9 @@ public class ConsumableController {
         return new ModelAndView("consumables_all", model);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/consumables/delete")
-    public ModelAndView deleteById(@RequestParam(name = "id") @NotNull String idStr, Map<String, Object> model) {
+    public ModelAndView deleteById(@RequestParam(name = "id") String idStr, Map<String, Object> model) {
         UUID consumableId;
         LOG.info("User {} wants to delete consumable with id {}", getLoggedUserId(), idStr);
         // TODO: Валидация comment
@@ -237,9 +250,7 @@ public class ConsumableController {
             }
         } catch (IllegalArgumentException e) {
             LOG.warn("Bad UUID. Canceling request. Redirecting home");
-
         }
-
         return new ModelAndView("redirect:/consumables", model);
     }
 }
