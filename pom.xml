@@ -74,6 +74,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Bulk import -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.0</version>
+        </dependency>
+
         <!-- Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

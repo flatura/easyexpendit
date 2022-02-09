@@ -85,13 +85,16 @@ public class ConsumableController {
             UUID consumableId = UUID.fromString(idStr);
             Optional<Consumable> consumable = consumableService.findById(consumableId);
             if (consumable.isPresent()) {
+                model.put("consumable", ConsumableDto.convertFrom(consumable.get()));
+
                 List<Transaction> transactions = transactionService.getAllByConsumableId(consumableId);
                 transactions.sort(Comparator.comparing(Transaction::getDateTime).reversed());
+                model.put("transactions_list", transactions);
+
                 List<Category> categories = categoryService.getAll();
                 categories.sort(Comparator.comparing(Category::getName));
-                model.put("consumable", ConsumableDto.convertFrom(consumable.get()));
-                model.put("transactions_list", transactions);
                 model.put("categories_list", categories);
+
                 LOG.info("Loading edit form for {} with {} transactions for user id {}", consumable.get().getName(), transactions.size(), getLoggedUserId());
                 return new ModelAndView("consumable_edit_form", model);
             } else {
@@ -152,6 +155,7 @@ public class ConsumableController {
         UUID loggedUser = getLoggedUserId();
         LOG.info("User {} wants to get list of consumables that contain: {}", loggedUser, word);
         // TODO: разбиение на слова и поиск по всем словам, затем объединение списков
+        // TODO: convert to DTO before putting it to model
         List<Consumable> result;
         if (word.matches(REGEX_WORDS)) {
             result = consumableService.findByWord(word);

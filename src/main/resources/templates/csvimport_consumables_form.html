@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div th:insert="fragments/style_css"></div>
+    <title>EasyExpendit: Импорт расходников из CSV</title>
+</head>
+<body style="padding-top: 55px">
+<div th:insert="fragments/menu"></div>
+<div class="container-fluid">
+    Импорт осуществляется через CSV.
+    Принимаются следующие столбцы в указанной последовательности: name, contract, price, partnumber, category(ID),
+    status, count и comment
+    Разделитель - ;
+    Кодировка файла - UTF-8
+    <form method="POST" th:action="@{/import/consumables}" enctype="multipart/form-data">
+        <div class="form-group mt-3">
+            <label for="file">Выберите CSV-файл</label>
+            <input type="file" name="file" class="form-control-file" id="file" accept=".csv">
+        </div>
+        <button type="submit" class="btn btn-primary">Импортировать расходники</button>
+    </form>
+</div>
+</body>
+</html>

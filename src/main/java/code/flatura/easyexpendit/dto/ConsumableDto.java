@@ -1,7 +1,6 @@
 package code.flatura.easyexpendit.dto;
 
 import code.flatura.easyexpendit.model.Consumable;
-import code.flatura.easyexpendit.model.Status;
 
 public class ConsumableDto {
     private String id;
@@ -12,9 +11,9 @@ public class ConsumableDto {
     private Integer categoryId;
     private String status;
     private Integer count;
-    private String transactionComment;
+    private String comment;
 
-    public ConsumableDto(String id, String name, String contract, Integer price, String partNumber, Integer categoryId, String status, Integer count, String transactionComment) {
+    public ConsumableDto(String id, String name, String contract, Integer price, String partNumber, Integer categoryId, String status, Integer count, String comment) {
         this.id = id;
         this.name = name;
         this.contract = contract;
@@ -23,15 +22,29 @@ public class ConsumableDto {
         this.categoryId = categoryId;
         this.status = status;
         this.count = count;
-        this.transactionComment = transactionComment;
+        this.comment = comment;
     }
 
-    public String getTransactionComment() {
-        return transactionComment;
+    public ConsumableDto(String name, String contract, Integer price, String partNumber, Integer categoryId, String status, Integer count, String comment) {
+        this.name = name;
+        this.contract = contract;
+        this.price = price;
+        this.partNumber = partNumber;
+        this.categoryId = categoryId;
+        this.status = status;
+        this.count = count;
+        this.comment = comment;
     }
 
-    public void setTransactionComment(String transactionComment) {
-        this.transactionComment = transactionComment;
+    public ConsumableDto() {
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Integer getCount() {
@@ -108,6 +121,6 @@ public class ConsumableDto {
                 c.getCategory().getId(),
                 c.getStatus().name(),
                 0,
-                "");
+                c.getComment());
     }
 }

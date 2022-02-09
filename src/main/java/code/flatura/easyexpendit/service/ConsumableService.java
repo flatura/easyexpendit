@@ -11,6 +11,7 @@ import code.flatura.easyexpendit.repository.datajpa.ConsumableRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -36,6 +37,7 @@ public class ConsumableService {
         return consumableRepository.findAll();
     }
 
+    @Transactional
     public boolean proceed(UUID consumableId, Status newStatus, String comment, UUID authorId) {
         LOG.info("Proceed consumable to new status...");
         if (consumableRepository.existsById(consumableId)) {
@@ -76,6 +78,7 @@ public class ConsumableService {
         return consumableRepository.findById(id);
     }
 
+    @Transactional
     public Consumable update(ConsumableDto modified, UUID consumableId) {
 
         Optional<Consumable> oldOpt = consumableRepository.findById(consumableId);
@@ -87,10 +90,13 @@ public class ConsumableService {
             if (modified.getPartNumber() != null) old.setPartNumber(modified.getPartNumber());
             if (!old.getCategory().getId().equals(modified.getCategoryId())) {
                 Optional<Category> categoryOpt = categoryRepository.findById(modified.getCategoryId());
-                categoryOpt.ifPresent(old::setCategory);
-            } else {
-                LOG.warn("Category doesn't exist in DB. Canceling request. Redirecting home");
+                if (categoryOpt.isPresent()) {
+                    old.setCategory(categoryOpt.get());
+                } else {
+                    LOG.warn("Category {} doesn't exist in DB. Canceling request. Redirecting home", modified.getCategoryId());
+                }
             }
+            if (modified.getComment() != null) old.setComment(modified.getComment());
             // Ignoring status because it is changed by Proceed() and Revert()
             return consumableRepository.saveAndFlush(old);
         } else {
@@ -99,11 +105,11 @@ public class ConsumableService {
         }
     }
 
+    @Transactional
     public List<Consumable> create(ConsumableDto newDto) {
         List<Consumable> result = new ArrayList<>();
         if (newDto.getCount() >= 1) {
             Optional<Category> categoryOpt = categoryRepository.findById(newDto.getCategoryId());
-
             if (categoryOpt.isPresent()) {
                 List<Consumable> createList = new ArrayList<>();
                 for (int i = 0; i < newDto.getCount(); i++) {
@@ -114,13 +120,13 @@ public class ConsumableService {
                             newDto.getPartNumber(),
                             categoryOpt.get(),
                             Status.valueOf(newDto.getStatus()),
-                            newDto.getTransactionComment()));
+                            newDto.getComment()));
                 }
                 result = consumableRepository.saveAllAndFlush(createList);
                 List<Transaction> resultTransactions = transactionService.createMultiple(
                         Status.AVAILABLE,
                         result,
-                        newDto.getTransactionComment(),
+                        newDto.getComment(),
                         SecurityUtil.getLoggedUserId());
                 if (result.size() == newDto.getCount()) {
                     StringJoiner resultIdStrJoiner = new StringJoiner(", ");
@@ -134,6 +140,7 @@ public class ConsumableService {
         return result;
     }
 
+    @Transactional
     public boolean deleteById(UUID id) {
         if (consumableRepository.existsById(id)) {
             consumableRepository.deleteById(id);
@@ -141,5 +148,15 @@ public class ConsumableService {
             return !consumableRepository.existsById(id);
         }
         return false;
+    }
+
+    @Transactional
+    public List<Consumable> createMultiple(List<ConsumableDto> consumableDtos) {
+        List<Consumable> result = new ArrayList<>();
+
+        for (ConsumableDto consDto : consumableDtos) {
+            result.addAll(create(consDto));
+        }
+        return result;
     }
 }

@@ -43,8 +43,8 @@ CREATE TABLE users_roles
 
 CREATE TABLE categories
 (
-  id   INTEGER DEFAULT nextval('categories_seq') PRIMARY KEY,
-  name VARCHAR(30) NOT NULL
+    id   INTEGER DEFAULT nextval('categories_seq') PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
 );
 
 
@@ -54,7 +54,7 @@ CREATE TABLE consumable
     name        VARCHAR(255) NOT NULL,
     contract    VARCHAR(255),
     price       INTEGER,
-    part_number VARCHAR(30),
+    part_number VARCHAR(60),
     category_id INTEGER,
     status      INTEGER      NOT NULL,
     comment     VARCHAR(255),
